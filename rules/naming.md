@@ -6,8 +6,6 @@
 |------|---------|---------|
 | Requirement Folder | `domain-short-desc` | `mvg-multiselect-ui` |
 | Completed Requirement | `completed-domain-short-desc` | `completed-pdf-account-summary` |
-| Guide File | `topic-name.md` | `presentation-model.md` |
-| Lab File | `Lab-NN-short-desc.md` | `Lab-01-Outbound-REST.md` |
 
 ## Folder Naming
 
@@ -21,8 +19,7 @@
 | Location | Pattern |
 |----------|---------|
 | `requirements/*/` | `README.md`, `implementation.md`, `testing.md` |
-| `core-concepts/` | `NN-topic-name.md` (numbered for order) |
-| `quick-reference/` | `imp-topic.md` or `topic.md` |
+
 
 ## Siebel Object Naming (in implementations)
 

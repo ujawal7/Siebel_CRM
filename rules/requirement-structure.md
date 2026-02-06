@@ -12,8 +12,6 @@ The "why" and "what" of the requirement.
 - Analysis: Solution Options (with pros/cons tables)
 - Decision (chosen option with rationale)
 - Impacted Objects (with risk levels)
-- Interview Questions (Q&A format)
-- How to Explain in Interview (5-step script)
 
 ### 2. implementation.md
 The "how" - step-by-step technical guide.
