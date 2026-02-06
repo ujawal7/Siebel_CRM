@@ -65,18 +65,6 @@ Use this template:
 
 ---
 
-## Interview Questions
-
-**Q1: [Question]**
-> "[Answer]"
-
----
-
-## How to Explain in Interview
-[Add after implementation]
-
----
-
 ## See Also
 → [implementation.md](./implementation.md)
 ```
@@ -86,11 +74,6 @@ Create empty file, fill during implementation.
 
 ### 4. Update DECISIONS.md
 Add a row for the key decision made.
-
-### 5. Commit
-```bash
-git add -A && git commit -m "Add [requirement-name] requirement"
-```
 
 ---
 
