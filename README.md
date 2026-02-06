@@ -86,3 +86,7 @@ The skill includes detailed references found in the `references/` directory:
 - [Integration Guide](references/integration.md)
 - [Open UI Guide](references/open-ui.md)
 - [Troubleshooting Guide](references/troubleshooting.md)
+
+## 📌 Disclaimer
+
+This repository contains my personal notes, expert summaries, and generalized Siebel CRM development patterns based on experience with Siebel. It is not official Oracle documentation and contains no client-specific or proprietary information. All content is written in my own words.
