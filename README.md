@@ -25,6 +25,9 @@ This skill equips your agent with deep knowledge of:
 
 Once installed, you can ask your agent questions like:
 
+> [!IMPORTANT]
+> If you have a new requirement, you should always start your prompt with `new requirement :`. This ensures the agent follows the correct workflow and works properly.
+
 - "How do I create a new Outbound REST integration in Siebel?"
 - "Write a script to query the Service Request BC."
 - "What is the best way to implement a cascading picklist?"
