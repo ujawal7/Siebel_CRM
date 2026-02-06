@@ -30,41 +30,51 @@ Once installed, you can ask your agent questions like:
 - "What is the best way to implement a cascading picklist?"
 - "Debug this error: SBL-DAT-00215"
 
-### 💡 Skill Example: Implementing Cascading Picklists (Step-by-Step)
-**User:** "How do I create a Country -> State cascading picklist?"
+### 💡 Skill Example: Configuration + Scripting Scenario
+**User:** "How do I add a button to assign a Service Request to myself?"
 
 **Agent Guide:**
-**Scenario**: User selects "USA" in *Country*, and *State* dropdown automatically filters to show only US states.
+**Scenario**: User clicks "Assign To Me" button → Record Owner updates to current user.
 
-**Step 1: Data Administration (LOV Setup)**
-1. Navigate to **Administration - Data > List of Values**.
-2. Create Parent Values (Type: `COUNTRY_LOV`):
-   - Display: `USA`, LIC: `USA`
-3. Create Child Values (Type: `STATE_LOV`):
-   - Display: `California`, LIC: `CA`, **Parent LIC**: `USA`
-   - Display: `Texas`, LIC: `TX`, **Parent LIC**: `USA`
-   > *Key Point: The link is defined in the 'Parent LIC' column of the child record.*
+**Step 1: Configuration (Tools)**
+1. **Applet**: Go to `Service Request List Applet`.
+2. **Control**: Add a Button.
+   - Caption: `Assign To Me`
+   - MethodInvoked: `AssignOwner` (Custom method name)
+3. **Applet User Prop**: Enable the button.
+   - Name: `CanInvokeMethod: AssignOwner`
+   - Value: `TRUE`
 
-**Step 2: Tools Configuration (Picklists)**
-1. **Parent Field** (`Country`): Use a standard Static Picklist pointing to `COUNTRY_LOV`.
-2. **Child Field** (`State`): Create a new Picklist (e.g., `PickList State Constrained`).
-   - Business Component: `PickList Generic`
-   - **Search Specification** (The Critical Logic):
-     ```
-     [Parent Type] = LookupValue('COUNTRY_LOV', GetFieldValue('Country'))
-     ```
-     *Translation: "Show me records from PickList Generic where the 'Parent Type' column matches the Language Independent Code (LIC) of the value currently selected in the 'Country' field."*
+**Step 2: Scripting (Server Script)**
+Handle the custom method in the BC.
 
-**Step 3: BC Field Configuration**
-1. Select the `State` field.
-2. Set **Picklist** to `PickList State Constrained`.
-3. Set **Pick Map**:
-   - Field: `State`, Pick Field: `Value`
-
-**Step 4: User Experience Tweak**
-1. Select the `Country` field.
-2. Set User Property **Immediate Post Changes** = `TRUE`.
-   > *Reason: This ensures the Country value is saved to the buscomp immediately. Without this, the State picklist won't "see" the new Country value until the user steps off the record.*
+1. **Object**: `Service Request` Business Component
+2. **Event**: `BusComp_PreInvokeMethod`
+3. **Code**:
+   ```javascript
+   function BusComp_PreInvokeMethod (MethodName)
+   {
+       if (MethodName == "AssignOwner")
+       {
+           try
+           {
+               // 1. Set the Owner field to the current user's Login ID
+               this.SetFieldValue("Owner Id", TheApplication().LoginId());
+               
+               // 2. Commit the record
+               this.WriteRecord();
+               
+               // 3. CancelOperation = Tell Siebel "I handled it, don't look further"
+               return (CancelOperation);
+           }
+           catch(e)
+           {
+               TheApplication().RaiseErrorText(e.toString());
+           }
+       }
+       return (ContinueOperation);
+   }
+   ```
 
 ## 📚 Reference Documentation
 
