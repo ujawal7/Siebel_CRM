@@ -12,7 +12,7 @@ description: >
 
 ## Development Workflow
 
-For any Siebel requirement, follow this approach:
+For any Siebel requirement, follow this approach. To start, use the **[New Requirement Workflow](commands/new-requirement.md)**.
 
 1. **Understand** - Clarify the business requirement and identify affected objects
 2. **Design** - Choose the right approach (Configuration vs Scripting vs Workflow)
@@ -116,7 +116,9 @@ Use this framework when organizing raw content, migrating old files, or maintain
 | `code-snippets/` | Reusable patterns | `common-patterns.md` |
 
 ### Requirement Folder Structure
-Each requirement should be a folder in `development/requirements/` with:
+Each requirement should be a folder in `development/requirements/`.
+For the mandatory structure and required files, see **[Requirement Structure Rule](rules/requirement-structure.md)**.
+
 ```
 domain-name/
 ├── README.md           # Analysis, decision, interview guide (REQUIRED)
@@ -126,6 +128,8 @@ domain-name/
 ```
 
 ### Naming Conventions
+For comprehensive naming rules (Files, Folders, and Siebel Objects), see **[Naming Conventions](rules/naming.md)**.
+
 | Type | Pattern | Example |
 |------|---------|--------|
 | Requirement Folder | `domain-short-desc` | `mvg-multiselect-ui` |
