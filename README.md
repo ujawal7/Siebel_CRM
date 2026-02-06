@@ -4,7 +4,7 @@ A comprehensive AI agent skill for Siebel CRM development, covering configuratio
 
 ## 📦 Installation
 
-Install this skill into your AI agent (Cursor, Windsurf, etc.) using the `skills` CLI:
+Install this skill into your AI agent (Cursor, Windsurf, Antigravity etc.) using the `skills` CLI:
 
 ```bash
 npx skills add ujawal7/Siebel_CRM
