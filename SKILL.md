@@ -157,12 +157,12 @@ For comprehensive naming rules (Files, Folders, and Siebel Objects), see **[Nami
 
 | Requirement Type | Primary Approach | Reference |
 |------------------|------------------|-----------|
-| Data automation on save/create | Runtime Event + Workflow | [workflows.md](references/workflows.md) |
-| Field calculations/validations | BC Script or Calculated Field | [scripting.md](references/scripting.md) |
-| External API calls | EAI HTTP Transport + BS | [integration.md](references/integration.md) |
-| UI behavior changes | Applet Script or User Property | [configuration.md](references/configuration.md) |
-| Scheduled/batch processing | Workflow Policy | [workflows.md](references/workflows.md) |
-| Multi-step business process | Service Flow Workflow | [workflows.md](references/workflows.md) |
+| Data automation on save/create | Runtime Event + Workflow | [workflows.md](core-concepts/workflows.md) |
+| Field calculations/validations | BC Script or Calculated Field | [scripting.md](core-concepts/scripting.md) |
+| External API calls | EAI HTTP Transport + BS | [integration.md](core-concepts/integration.md) |
+| UI behavior changes | Applet Script or User Property | [configuration.md](core-concepts/configuration.md) |
+| Scheduled/batch processing | Workflow Policy | [workflows.md](core-concepts/workflows.md) |
+| Multi-step business process | Service Flow Workflow | [workflows.md](core-concepts/workflows.md) |
 
 ## Quick Patterns
 
@@ -210,13 +210,13 @@ Read the appropriate reference when working on specific domains:
 
 | Domain | Reference | When to Read |
 |--------|-----------|--------------|
-| Workflows | [workflows.md](references/workflows.md) | Creating or modifying workflow processes, Runtime Events, or policies |
-| Integration | [integration.md](references/integration.md) | REST/SOAP calls, EAI, Integration Objects |
-| Scripting | [scripting.md](references/scripting.md) | eScript, Business Services, BC events |
-| Configuration | [configuration.md](references/configuration.md) | BC, Applet, BO, Links, Picklists, MVGs |
-| Runtime Events | [runtime-events.md](references/runtime-events.md) | Setting up triggers and action sets |
-| Open UI | [open-ui.md](references/open-ui.md) | PM, PR, Plugin Wrappers, Manifest |
-| Troubleshooting | [troubleshooting.md](references/troubleshooting.md) | Debugging issues, common errors |
+| Workflows | [workflows.md](core-concepts/workflows.md) | Creating or modifying workflow processes, Runtime Events, or policies |
+| Integration | [integration.md](core-concepts/integration.md) | REST/SOAP calls, EAI, Integration Objects |
+| Scripting | [scripting.md](core-concepts/scripting.md) | eScript, Business Services, BC events |
+| Configuration | [configuration.md](core-concepts/configuration.md) | BC, Applet, BO, Links, Picklists, MVGs |
+| Runtime Events | [runtime-events.md](core-concepts/runtime-events.md) | Setting up triggers and action sets |
+| Open UI | [open-ui.md](core-concepts/open-ui.md) | PM, PR, Plugin Wrappers, Manifest |
+| Troubleshooting | [troubleshooting.md](core-concepts/troubleshooting.md) | Debugging issues, common errors |
 
 ## Key Siebel Objects Hierarchy
 

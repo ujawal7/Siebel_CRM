@@ -81,14 +81,14 @@ Handle the custom method in the BC.
 
 ## 📚 Reference Documentation
 
-The skill includes detailed references found in the `references/` directory:
+The skill includes detailed references found in the `core-concepts/` directory:
 
-- [Configuration Guide](references/configuration.md)
-- [Scripting Guide](references/scripting.md)
-- [Workflow Guide](references/workflows.md)
-- [Integration Guide](references/integration.md)
-- [Open UI Guide](references/open-ui.md)
-- [Troubleshooting Guide](references/troubleshooting.md)
+- [Configuration Guide](core-concepts/configuration.md)
+- [Scripting Guide](core-concepts/scripting.md)
+- [Workflow Guide](core-concepts/workflows.md)
+- [Integration Guide](core-concepts/integration.md)
+- [Open UI Guide](core-concepts/open-ui.md)
+- [Troubleshooting Guide](core-concepts/troubleshooting.md)
 
 ## 📌 Disclaimer
 
