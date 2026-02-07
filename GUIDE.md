@@ -48,3 +48,28 @@ To keep this skill "smart", follow this weekly routine:
 ## 5. Adding New Templates
 
 If you find yourself creating the same file over and over, add it to `templates/` and update `commands/scaffold.js` to include it.
+
+## 6. Release Workflow (Branching Strategy)
+
+We use a 3-tier branching strategy:
+
+1.  **`develop`**: All new features and patterns go here first.
+2.  **`QA`**: Merge `develop` to `QA` for testing.
+3.  **`main`**: Stable release. Agents use this version.
+
+**Workflow:**
+1.  Work on `develop`.
+2.  **Wait for User Request**: Do not push to `QA` unless specifically asked.
+3.  When requested, merge to `QA`:
+    ```bash
+    git checkout QA
+    git merge develop
+    git push origin QA
+    ```
+3.  After verification, release to `main`:
+    ```bash
+    git checkout main
+    git merge QA
+    git push origin main
+    ```
+
