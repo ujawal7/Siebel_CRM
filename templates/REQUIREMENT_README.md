@@ -20,7 +20,3 @@
 - [ ] Unit Test 1
 - [ ] Unit Test 2
 
-## 6. Interview Talking Points
-- **Challenge**: [What was hard?]
-- **Solution**: [How did you solve it?]
-- **Learnings**: [What did you learn?]

@@ -119,6 +119,37 @@ Filter based on another field.
 
 ---
 
+
+---
+
+## Drilldowns
+
+### Static Drilldown
+Navigates to a specific view from a list column link.
+- **Object**: `Drilldown Object` on Applet.
+- **Issue**: "Record not found" if drilldown target applet has different search spec/visibility.
+
+### Dynamic Drilldown
+Navigates to *different* views based on field value.
+1. Create multiple Drilldown Objects (destinations).
+2. Create `Dynamic Drilldown Destination` objects under the *primary* drilldown.
+3. Map `Field` and `Value` to specific Drilldown Objects.
+
+---
+
+## Hierarchical Picklists
+
+User selects Parent value -> Child picklist filtered by Parent.
+
+**Setup:**
+1. **LOV**: Setup Parent and Child LOVs. Set `Parent Type` and `Parent Value` on Child LOV records.
+2. **BC**:
+   - Create Picklists for both Parent and Child fields.
+   - **Child Pickmap**: Map Parent Field to `Parent Pick Component Column`.
+   - **Constraint**: `PickList Hierarchical` property on Child Picklist object = TRUE.
+
+---
+
 ## MVG & SVF
 
 ### Multi-Value Group (MVG)
@@ -148,6 +179,19 @@ Display one value from M:M with popup to change.
 
 ## Applets
 
+
+## Applets
+
+### Toggle Applets
+Switch applet display based on field value (Dynamic Toggle) or User Profile (Static Toggle).
+
+**Dynamic Toggle Setup:**
+1. Go to `Applet Toggle` object on the Base Applet.
+2. Add record:
+   - **Applet**: Target Applet to show.
+   - **Auto Toggle Field**: Field to check (e.g., `Type`).
+   - **Auto Toggle Value**: Value to match (e.g., `Detail`).
+
 ### Applet Types
 | Type | Use |
 |------|-----|
@@ -176,12 +220,15 @@ Configure via List Column objects.
 | On Field Update Invoke | Call method on field change |
 | Named Search | Predefined searches |
 
+
 ### Applet User Properties
 | User Property | Purpose |
 |---------------|---------|
-| CanInvokeMethod | Enable/disable buttons |
+| CanInvokeMethod | Enable/disable buttons (set Value=`TRUE`) |
 | Auto Query Mode | Auto-query on applet load |
 | Default Focus Field | Initial cursor position |
+| NoDataHide | Hides applet if no records found (Value=`Y`) |
+| Named Method | Invoke specialized actions/script from UI |
 
 ### Field User Properties
 | User Property | Purpose |

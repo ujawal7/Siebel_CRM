@@ -40,6 +40,18 @@
 
 ## Workflow Steps
 
+### Invocation Methods
+Workflows can be triggered in multiple ways:
+
+| Method | Mechanism | Context |
+|--------|-----------|---------|
+| **Runtime Event** | Action Set on Application/BC Event | Real-time, user context |
+| **Workflow Policy** | Db Trigger → `S_ESCL_REQ` → Monitor Agent | Asynchronous, system context |
+| **Script** | `Workflow Process Manager` BS | Flexible invocation |
+| **User Property** | `Named Method` on Applet | Button click |
+
+---
+
 ### Siebel Operation Step
 CRUD operations on Business Components.
 
@@ -134,6 +146,16 @@ For scheduled/batch processing using Workflow Policy component.
 ---
 
 ## Common Patterns
+
+
+### Pattern: Validation (Stop & Error)
+```
+Start
+  ↓
+Decision: Is Amount > Limit?
+  ├─ Yes → Stop Step (Type=Error, Code=MyErr, Message="Limit Exceeded")
+  └─ No → Continue
+```
 
 ### Pattern: Update Field + Create Related Record
 ```

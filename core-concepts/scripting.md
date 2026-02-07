@@ -56,6 +56,29 @@ return CancelOperation;    // Prevent action (Pre-events only)
 
 ---
 
+
+---
+
+## Profile Attributes & Global Constraints
+
+### Profile Attributes
+Session-specific variables available in Script and Personalization.
+```javascript
+// Set
+TheApplication().SetProfileAttr("MyAttr", "Value");
+// Get
+var val = TheApplication().GetProfileAttr("MyAttr");
+```
+
+### Global Variables
+Variables shared across scripts in the same session (careful with memory).
+```javascript
+TheApplication().SetSharedGlobal("MyVar", "Value");
+var val = TheApplication().GetSharedGlobal("MyVar");
+```
+
+---
+
 ## Common Methods
 
 ### TheApplication()
@@ -223,15 +246,19 @@ function ParseJSON(jsonString) {
 }
 ```
 
-### Pattern: Error Handling
+### Pattern: Error Handling (Best Practice)
+Always use `try-catch-finally` to ensure objects are destroyed.
 ```javascript
 try {
-    // Code that might fail
+    var oBO = TheApplication().GetBusObject("Account");
+    var oBC = oBO.GetBusComp("Account");
+    // Logic...
 } catch(e) {
-    TheApplication().Trace("Error: " + e.message);
-    throw(e);
+    TheApplication().Trace("Error: " + e.toString());
+    TheApplication().RaiseErrorText("Custom Error: " + e.toString());
 } finally {
-    oBC = null;
-    oBO = null;
+    // Explicitly release objects to prevent memory leaks
+    if (oBC) { oBC = null; }
+    if (oBO) { oBO = null; }
 }
 ```
