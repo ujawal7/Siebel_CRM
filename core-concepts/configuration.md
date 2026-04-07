@@ -1,13 +1,65 @@
 # Siebel Configuration Reference
 
 ## Table of Contents
-1. [Business Components](#business-components)
-2. [Fields & Joins](#fields--joins)
-3. [Links](#links)
-4. [Picklists](#picklists)
-5. [MVG & SVF](#mvg--svf)
-6. [Applets](#applets)
-7. [User Properties](#user-properties)
+1. [Database Layer](#database-layer)
+2. [Business Components](#business-components)
+3. [Fields & Joins](#fields--joins)
+4. [Links](#links)
+5. [Picklists](#picklists)
+6. [LOV Architecture](#lov-architecture)
+7. [MVG & SVF](#mvg--svf)
+8. [Applets](#applets)
+9. [User Properties](#user-properties)
+10. [View Modes](#view-modes)
+11. [Compilation & Deployment](#compilation--deployment)
+
+---
+
+## Database Layer
+
+### Entity-to-Table Mapping
+| Entity | Primary Table |
+|--------|--------------|
+| Account | `S_ORG_EXT` |
+| Contact | `S_CONTACT` |
+| Opportunity | `S_OPTY` |
+| Activity | `S_EVT_ACT` |
+| Service Request | `S_SRV_REQ` |
+| Order | `S_ORDER` |
+| Quote | `S_DOC_QUOTE` |
+| Asset | `S_ASSET` |
+| Product | `S_PROD_INT` |
+
+### Base Table vs Extension Table
+| Aspect | Base Table | Extension Table |
+|--------|-----------|----------------|
+| Definition | Core Siebel table (e.g., `S_ORG_EXT`) | Custom table added by developers |
+| Upgrade | Preserved; schema managed by Siebel | Must be manually managed |
+| Columns | Has pre-allocated ATTRIB columns | All columns are custom |
+| Example | `S_EVT_ACT` (Activity) | `CX_CUSTOM_DATA` |
+
+### Extension Columns
+- Pre-allocated physical columns (`ATTRIB_01` through `ATTRIB_99`).
+- Custom columns **must** use `X_` prefix (e.g., `X_CUSTOM_FLAG`).
+- Non-`X_` columns risk being **overwritten during upgrade**.
+
+**Check column usage before allocating:**
+```sql
+SELECT cc.NAME, cc.COL_NUM, cc.PHYS_TYPE, cc.LEN
+FROM SIEBEL.S_TABLE_COL cc
+JOIN SIEBEL.S_TABLE t ON cc.TBL_ID = t.ROW_ID
+WHERE t.NAME = 'S_EVT_ACT'
+  AND cc.INACTIVE_FLG = 'N'
+ORDER BY cc.COL_NUM;
+```
+
+### Apply DDL
+**Apply DDL** physically creates/modifies columns in the database. Must run:
+- After creating a new extension column
+- After modifying column attributes (length, data type)
+- **Before** compiling BC fields that reference the new column
+
+> ⚠️ If you skip Apply DDL, BC compiles fine but runtime throws SQL errors.
 
 ---
 
@@ -39,6 +91,24 @@
 | Calculated | Expression-based |
 | Join | From joined table |
 | Multi-Value Link | From M:M relationship |
+
+### DTYPE Reference
+| DTYPE | Use Case |
+|-------|----------|
+| `DTYPE_TEXT` | General text/string fields |
+| `DTYPE_NUMBER` | Numeric values (integer or decimal) |
+| `DTYPE_UTCDATETIME` | Date and time stored in UTC |
+| `DTYPE_BOOL` | Boolean flags (Y/N) |
+| `DTYPE_ID` | ROW_ID references (foreign keys) |
+| `DTYPE_NOTE` | Long text (CLOB) — use sparingly |
+| `DTYPE_CURRENCY` | Monetary amounts |
+| `DTYPE_PHONE` | Phone number formatting |
+| `DTYPE_DATE` | Date only (no time component) |
+
+### Force Active
+**Force Active = TRUE** → field is always included in every SQL query, even if not displayed.
+- Degrades query performance significantly.
+- Only set TRUE when field is needed by server scripts, calculated fields, or workflows on **every** BC interaction.
 
 ### Join Configuration
 | Property | Purpose |
@@ -116,6 +186,37 @@ Filter based on another field.
 ```
 [Parent Type] = LookupValue('PARENT_LOV', GetFieldValue('Parent Field'))
 ```
+
+---
+
+## LOV Architecture
+
+### Core Components
+- **Type**: Grouping key (e.g., `CRM_AI_LEAD_MOTIVE`)
+- **LIC (Language Independent Code)**: Internal DB value — same across all languages. **Never change after go-live.**
+- **Display Value**: What end-users see — differs per language.
+- **Language Code**: `ENU` (English), `FRA` (French), `DEU` (German), etc.
+
+```
+Type: CRM_AI_LEAD_MOTIVE
+├── LIC: "Non-LCV buyer"  → ENU: "Non-LCV buyer"  → FRA: "Non acheteur VU"
+├── LIC: "Competition"     → ENU: "Competition"     → FRA: "Concurrence"
+└── LIC: "Closed account"  → ENU: "Closed account"  → FRA: "Compte clôturé"
+```
+
+### LOV Bounded
+- **TRUE**: User must select from dropdown (no free-text). Use for Status fields.
+- **FALSE**: User can type custom value. Use for flexible fields.
+
+### Key Tables
+| Table | Content |
+|-------|---------|
+| `S_LST_OF_VAL` | LOV data |
+| `S_RESP` | Responsibility info |
+| `S_APP_VIEW` | Responsibility-to-View mapping |
+| `S_REPOSITORY` | Siebel repository |
+
+> ⚠️ If LOV entries missing for a language, users see **blank dropdowns**. Always create records for all supported languages.
 
 ---
 
@@ -241,3 +342,59 @@ Configure via List Column objects.
 |---------------|---------|
 | Copy Source Field | Copy value to child |
 | Cascade Update | Update children on parent change |
+
+---
+
+## View Modes
+
+| View Mode | Description |
+|-----------|-------------|
+| **All View** | All records (no restriction) |
+| **Sales Rep View** | Records where user is on team (Position-based) |
+| **Manager View** | User + all direct/indirect reports |
+| **Personal View** | Only records owned by logged-in user |
+| **Sub-Organization View** | User's org and sub-orgs |
+| **Group View** | Records in user's access group |
+| **Catalog View** | Product catalog visibility |
+
+---
+
+## Compilation & Deployment
+
+### Compilation Order
+1. **Table** (Apply DDL first)
+2. **Business Component**
+3. **Applet**
+4. **View**
+5. **Screen**
+
+### SRF (Siebel Repository File)
+Compiled binary loaded by the application server at runtime.
+
+| Type | Description |
+|------|-------------|
+| **Full Compile** | Entire repository → new SRF. Slower but safest. |
+| **Incremental** | Only modified/locked projects. Faster, may miss dependencies. |
+
+> Use incremental in dev, **full compile before production**. Always back up SRF.
+
+### Deployment Pipeline
+1. **Lock** project(s) in Siebel Tools
+2. Make configuration changes
+3. **Apply DDL** (if columns created/modified)
+4. **Compile** in correct order
+5. **Generate SRF** (full compile for production)
+6. **Test** in dev/test environment
+7. **Export** repository (ADM packages / SIF files)
+8. **Import** into target environment
+9. **Deploy** SRF to application server
+10. **Restart** Siebel services / clear cache
+11. **Validate** with smoke tests
+
+### Workspace (IP2017+)
+Modern Siebel's **version control** — replaces project-locking:
+- Each developer works in an isolated **workspace** (sandbox)
+- Changes don't affect the published repository
+- **Deliver** = merge into main branch
+- Supports **compare**, **rollback**, **discard**
+- Analogous to **Git branches** for Siebel repository
