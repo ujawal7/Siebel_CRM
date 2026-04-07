@@ -35,6 +35,23 @@ For any Siebel requirement, follow this approach. To start, use the **[New Requi
 | Scheduled/batch processing | Workflow Policy | [workflows.md](core-concepts/workflows.md) |
 | Multi-step business process | Service Flow Workflow | [workflows.md](core-concepts/workflows.md) |
 
+## 🧭 Decision Principles
+
+When answering, the agent should:
+- Prefer configuration over scripting
+- Prefer server-side logic over browser script
+- Avoid performance-heavy patterns by default
+- Clearly state trade-offs when multiple solutions exist
+- Highlight risks in production scenarios
+
+## 🎓 Answer Style
+
+- Explain WHY before HOW
+- Use enterprise terminology
+- Assume production scale
+- Mention performance and maintenance impact
+- Avoid tutorial-style explanations unless asked
+
 ## Quick Patterns
 
 ### Trigger Workflow on Record Save
